@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TBS — Temporal Backtracking Search for Test-time Generative Video Reasoning</title>
+<meta name="description" content="Temporal Backtracking Search: test-time scaling for generative video reasoning. NeurIPS 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Google+Sans:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --text:#4a4a4a; --strong:#1a1a1a; --muted:#888;
+    --link:#1d4ed8; --rule:#e6e6e6;
+    --bg:#fff; --soft:#fafafa; --callout:#f4f6fa;
+    --accent:#1d4ed8; --good:#2b8a3e; --bad:#c92a2a;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:'Noto Sans',sans-serif;font-size:17px;line-height:1.65;}
+  a{color:var(--link);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--strong);font-weight:600;}
+
+  .w{max-width:1020px;margin:0 auto;padding:0 28px;}
+  .sep{border:none;border-top:1px solid var(--rule);margin:52px auto 0;max-width:1020px;display:block;}
+  h2.sec{font-family:'Google Sans',sans-serif;font-weight:700;
+    font-size:clamp(22px,2.5vw,30px);color:var(--strong);
+    text-align:center;margin:46px 0 20px;letter-spacing:-.01em;}
+
+  /* HERO */
+  .hero{padding:56px 0 30px;text-align:center;border-bottom:1px solid var(--rule);}
+  .hero h1{font-family:'Google Sans',sans-serif;font-weight:700;
+    font-size:clamp(22px,3.4vw,38px);line-height:1.2;
+    color:var(--strong);margin:0 auto 10px;max-width:26ch;letter-spacing:-.014em;}
+  .badges{display:flex;justify-content:center;gap:8px;margin:10px 0 14px;}
+  .badge{border-radius:999px;padding:3px 12px;font-family:'Google Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.03em;}
+  .bc{background:rgba(29,78,216,.09);border:1px solid rgba(29,78,216,.22);color:var(--accent);}
+  .bp{background:var(--soft);border:1px solid var(--rule);color:var(--muted);}
+  .authors{font-size:15px;color:var(--strong);margin:0 0 4px;line-height:1.9;}
+  .authors a{color:var(--link);font-weight:500;}
+  .affils{font-size:13px;color:var(--muted);margin:0 0 20px;}
+  .btns{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;
+    background:#1a1a1a;color:#fff;border-radius:999px;border:none;
+    font-family:'Google Sans',sans-serif;font-weight:500;font-size:13.5px;
+    text-decoration:none;cursor:pointer;transition:background .14s,transform .14s;}
+  .btn:hover{background:#333;color:#fff;text-decoration:none;transform:translateY(-1px);}
+  .btn.off{opacity:.42;pointer-events:none;}
+  .btn svg{width:13px;height:13px;fill:currentColor;}
+
+  /* HOOK */
+  .hook{padding:52px 28px 0;text-align:center;max-width:1020px;margin:0 auto;}
+  .hook .q{font-family:'Google Sans',sans-serif;font-weight:700;
+    font-size:clamp(20px,2.5vw,29px);color:var(--strong);
+    line-height:1.3;max-width:22ch;margin:0 auto 10px;letter-spacing:-.012em;}
+  .hook .a{font-size:15.5px;color:var(--text);max-width:48ch;margin:0 auto;line-height:1.7;}
+
+  /* ABSTRACT */
+  .abstract{max-width:800px;margin:0 auto;padding:0 28px;}
+  .abstract p{font-size:16px;line-height:1.8;color:var(--text);margin:0 0 14px;
+    text-align:justify;text-justify:inter-word;}
+  .abstract p:last-child{margin:0;}
+
+  /* PROBLEM SECTION */
+  .diagnosis{max-width:1020px;margin:0 auto;padding:0 28px;}
+  .dx-intro{text-align:center;max-width:640px;margin:0 auto 22px;
+    font-size:15.5px;color:var(--text);line-height:1.65;}
+  .dx-pair{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:24px;}
+  .dx-card{background:var(--callout);border:1px solid var(--rule);border-radius:8px;padding:20px 20px 16px;}
+  .dx-card .num{font-family:'Roboto Mono',monospace;font-size:10.5px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;}
+  .dx-card h3{font-family:'Google Sans',sans-serif;font-weight:700;
+    font-size:15.5px;color:var(--strong);margin:0 0 8px;line-height:1.3;}
+  .dx-card p{font-size:14px;line-height:1.6;color:var(--text);margin:0 0 6px;}
+  .dx-card p:last-child{margin:0;}
+  .verdict{display:inline-block;margin-top:10px;font-family:'Roboto Mono',monospace;
+    font-size:10.5px;font-weight:600;color:var(--bad);
+    background:rgba(201,42,42,.07);border:1px solid rgba(201,42,42,.2);
+    border-radius:4px;padding:2px 8px;}
+  @media(max-width:820px){.dx-pair{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.dx-pair{grid-template-columns:1fr;}}
+
+  /* FIGURES */
+  .fig{max-width:1020px;margin:0 auto;padding:0 28px;text-align:center;}
+  .fig img{max-width:100%;height:auto;display:block;margin:0 auto;border-radius:4px;}
+  .fig.bd img{border:1px solid var(--rule);}
+  .cap{max-width:800px;margin:11px auto 0;font-size:13.5px;color:var(--text);line-height:1.6;text-align:left;}
+  .cap b{color:var(--strong);}
+
+  /* INSIGHT STRIP */
+  .istrip{display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr;
+    align-items:center;max-width:860px;margin:20px auto 0;
+    background:var(--soft);border:1px solid var(--rule);border-radius:7px;padding:16px 18px;}
+  .ic{text-align:center;padding:0 6px;}
+  .ic .ilabel{font-family:'Roboto Mono',monospace;font-size:9.5px;font-weight:600;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+  .ic .ibody{font-size:13px;color:var(--text);line-height:1.5;}
+  .ic.hi .ibody{color:var(--accent);}
+  .ic.hi .ilabel{color:rgba(29,78,216,.6);}
+  .iarrow{text-align:center;color:var(--muted);font-size:18px;}
+  @media(max-width:640px){
+    .istrip{grid-template-columns:1fr;gap:10px;}
+    .iarrow{transform:rotate(90deg);}
+  }
+
+  /* METHOD */
+  .mintro{max-width:640px;margin:0 auto 18px;padding:0 28px;
+    text-align:center;font-size:15.5px;color:var(--text);line-height:1.65;}
+
+  /* ── RESULTS TABLE with inline bars ── */
+  .tbl{max-width:860px;margin:0 auto;padding:0 28px;}
+
+  .tbl table{
+    width:100%;border-collapse:collapse;font-size:13.5px;
+    font-variant-numeric:tabular-nums;background:#fff;
+    border-radius:8px;overflow:hidden;
+    border:1px solid var(--rule);
+  }
+  .tbl table caption{
+    caption-side:top;text-align:center;padding-bottom:12px;
+    font-family:'Google Sans',sans-serif;font-weight:600;font-size:13.5px;color:var(--strong);
+  }
+  /* col groups */
+  .tbl colgroup.cg-base col{background:rgba(201,42,42,.025);}
+  .tbl colgroup.cg-ours col{background:rgba(29,78,216,.025);}
+
+  .tbl th,.tbl td{padding:8px 12px;text-align:right;border-bottom:1px solid #f0f0f0;}
+  .tbl th:first-child,.tbl td:first-child{text-align:left;padding-left:14px;}
+  .tbl th:nth-child(2),.tbl td:nth-child(2){text-align:left;}
+
+  /* top-level group headers */
+  .tbl thead tr.grp th{
+    font-family:'Google Sans',sans-serif;font-weight:700;font-size:11px;
+    letter-spacing:.05em;text-transform:uppercase;
+    border-bottom:1px solid var(--rule);padding:6px 12px;
+  }
+  .tbl thead tr.grp th.gh-base{background:rgba(201,42,42,.07);color:var(--bad);}
+  .tbl thead tr.grp th.gh-ours{background:rgba(29,78,216,.07);color:var(--accent);}
+  .tbl thead tr.grp th.gh-meta{background:var(--callout);color:var(--muted);}
+  .tbl thead tr.grp th.gh-delta{background:rgba(43,138,62,.07);color:var(--good);}
+
+  /* sub-headers */
+  .tbl thead tr.sub th{
+    background:var(--callout);color:var(--strong);
+    font-family:'Google Sans',sans-serif;font-weight:700;
+    font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+    border-bottom:2px solid var(--rule);
+  }
+
+  /* inline bar cells */
+  .tbl td.bar{
+    position:relative;
+    background:linear-gradient(to right,
+      var(--bc, rgba(29,78,216,.10)) var(--bw,0%),
+      transparent var(--bw,0%));
+  }
+  .tbl td.bar.bon{--bc:rgba(201,42,42,.10);}
+
+  .tbl td.best{font-weight:700;color:var(--accent);}
+  .tbl td.bad{color:var(--bad);}
+  .tbl td.delta{font-weight:700;color:var(--good);background:rgba(43,138,62,.04);}
+  .tbl td.delta.big{font-size:15px;}
+  .tbl tr.ours{background:rgba(29,78,216,.02);}
+  .tbl tr.sep-row td{border-top:2px solid #c9d7f5;}
+  .tbl tbody tr:last-child td{border-bottom:none;}
+  .tbl td .sub{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:1px;}
+
+  /* DOMAIN TRANSITION */
+  .transition{
+    max-width:860px;margin:40px auto 0;padding:14px 22px;
+    background:var(--soft);border-left:3px solid var(--accent);
+    border-radius:0 6px 6px 0;
+    font-size:15px;color:var(--text);line-height:1.6;
+  }
+  .transition em{color:var(--accent);font-style:normal;font-weight:600;}
+
+  /* QUAL */
+  .qual{max-width:1020px;margin:32px auto 0;padding:0 28px;}
+  .qual+.qual{margin-top:44px;}
+  .qhead{display:flex;align-items:center;gap:7px;margin-bottom:9px;flex-wrap:wrap;}
+  .qhead h3{font-family:'Google Sans',sans-serif;font-weight:700;font-size:14px;color:var(--strong);margin:0;}
+  .tag{display:inline-block;border-radius:3px;padding:2px 7px;
+    font-family:'Roboto Mono',monospace;font-size:10px;font-weight:500;}
+  .td{background:#eef3ff;border:1px solid #c7d7f7;color:var(--accent);}
+  .tf{background:rgba(201,42,42,.06);border:1px solid rgba(201,42,42,.2);color:var(--bad);}
+  .tok{background:rgba(43,138,62,.06);border:1px solid rgba(43,138,62,.2);color:var(--good);}
+  .ql{font-family:'Roboto Mono',monospace;font-size:9.5px;font-weight:500;
+    color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
+  .strip{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:8px;}
+  .frame{position:relative;}
+  .frame img{width:100%;height:auto;display:block;border-radius:3px;border:1px solid #eaeaea;}
+  .frame.fail img{border-color:rgba(201,42,42,.5);}
+  .frame.ok   img{border-color:rgba(43,138,62,.5);}
+  .fl{position:absolute;bottom:3px;left:3px;
+    font-family:'Roboto Mono',monospace;font-size:8px;
+    background:rgba(0,0,0,.54);color:#fff;border-radius:2px;padding:1px 3px;line-height:1.3;}
+  .qnote{font-size:12.5px;color:var(--muted);line-height:1.5;}
+  @media(max-width:540px){.strip{grid-template-columns:repeat(3,1fr);}}
+
+  /* BIBTEX */
+  .bib{max-width:800px;margin:0 auto;padding:0 28px;position:relative;}
+  .bib pre{background:#f8f8f8;border:1px solid var(--rule);border-radius:6px;
+    padding:16px 20px;margin:0;overflow-x:auto;
+    font-family:'Roboto Mono',monospace;font-size:12.5px;color:var(--strong);line-height:1.65;}
+  .cbtn{position:absolute;top:10px;right:38px;background:#fff;border:1px solid var(--rule);color:var(--text);
+    padding:3px 9px;border-radius:4px;font-family:'Google Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .14s;}
+  .cbtn:hover{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+
+  footer{margin-top:56px;padding:20px 28px 38px;border-top:1px solid var(--rule);
+    text-align:center;font-size:12px;color:var(--muted);}
+  footer p{margin:3px 0;} footer a{color:var(--link);}
+
+  @media(max-width:600px){
+    .w,.abstract,.diagnosis,.fig,.mintro,.tbl,.qual,.bib,.transition{padding-left:16px;padding-right:16px;}
+    .hook{padding:36px 16px 0;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="w">
+    <h1>Temporal Backtracking Search for Test-time Generative Video Reasoning</h1>
+    <div class="badges"><span class="badge bp">Preprint</span></div>
+    <p class="authors">Sejoon Jun,&ensp;<a href="https://scholar.google.com/citations?user=TOYBXFQAAAAJ&hl=en" target="_blank">Zheng Ding</a>,&ensp;<a href="https://hither1.github.io/" target="_blank">Chloe H. Su</a>,&ensp;<a href="https://yewr.github.io/" target="_blank">Weirui Ye</a>,&ensp;<a href="https://yilundu.github.io/" target="_blank">Yilun Du</a></p>
+    <p class="affils">Northeastern University &nbsp;·&nbsp; Harvard &amp; Kempner Institute &nbsp;·&nbsp; MIT &amp; Kempner Institute</p>
+    <div class="btns">
+      <a class="btn off" href="#"><svg viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0z"/></svg>Paper (soon)</a>
+      <a class="btn off" href="#"><svg viewBox="0 0 448 512"><path d="M380.6 81.7c7.9 15.8 1.5 35-14.3 42.9L103.6 256l262.7 131.4c15.8 7.9 22.2 27.1 14.3 42.9s-27.1 22.2-42.9 14.3l-320-160C6.8 279.2 0 268.1 0 256s6.8-23.2 17.7-28.6l320-160c15.8-7.9 35-1.5 42.9 14.3z"/></svg>arXiv (soon)</a>
+      <a class="btn" href="#bibtex"><svg viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>BibTeX</a>
+    </div>
+  </div>
+</header>
+
+
+<!-- HOOK -->
+<div class="hook">
+  <p class="q">Dead end in a maze?<br>Go back to the last fork, not the entrance.</p>
+  <p class="a">TBS applies this to generative video world models. When a rollout fails, it backtracks to the exact failure point and branches from there, instead of discarding the whole plan and starting over.</p>
+</div>
+
+
+<!-- ABSTRACT -->
+<hr class="sep">
+<h2 class="sec">Abstract</h2>
+<div class="abstract">
+  <p>
+    Generative video models are emerging as world simulators for sequential decision-making: by extracting action plans from generated rollouts, agents can plan and solve complex tasks entirely in imagination. In this setting, the relevant axis for scaling test-time compute is not aesthetic quality but <strong>trajectory correctness</strong>.
+  </p>
+  <p>
+    We identify two empirical bottlenecks that make existing test-time scaling paradigms fail. First, <strong>video models commit to a high-level spatial trajectory within the earliest denoising steps</strong> — adding compute to later steps cannot rescue a wrong plan. Second, <strong>reasoning failures cluster heavily in the early temporal stages</strong> — root-level Best-of-N (BoN) wastes its budget by repeatedly re-failing at the same bottleneck, discarding valid upstream progress each time.
+  </p>
+  <p>
+    We introduce <strong>Temporal Backtracking Search (TBS)</strong>, which shifts the search space to the temporal axis via an iterative <em>generate–verify–restart</em> loop: verify the rollout, isolate the first failure, cache the valid prefix, and generate only the remaining suffix. Across algorithmic reasoning, continuous navigation, and robotic manipulation, TBS Pareto-dominates matched-budget BoN. In a strict out-of-distribution setting where single-shot generation collapses (<strong>0.7%</strong> for BoN-20), TBS achieves <strong>22.7%</strong> — every solved episode from a restarted branch.
+  </p>
+</div>
+
+
+<!-- THE PROBLEM -->
+<hr class="sep">
+<h2 class="sec">Why existing test-time scaling fails</h2>
+<div class="diagnosis">
+  <div class="dx-pair">
+    <div class="dx-card">
+      <p class="num">Denoising-step search</p>
+      <p>The spatial trajectory is committed at the very first denoising step — S<sub>1</sub>, S<sub>5</sub>, and S<sub>40</sub> all produce the same plan. There is nothing to search over.</p>
+      <span class="verdict">✗ Wrong axis entirely</span>
+    </div>
+    <div class="dx-card">
+      <p class="num">Root-level Best-of-N</p>
+      <p>72–78% of failures occur in the first 20% of a rollout. Every independent resample replays the same early bottleneck — discarding the verified-correct remainder each time.</p>
+      <span class="verdict">✗ Wastes verified upstream progress</span>
+    </div>
+    <div class="dx-card">
+      <p class="num">One-shot generation, long horizons</p>
+      <p>Correctness must hold at every frame simultaneously. On 2D Maze paths of 41+ steps, single-shot BoN-1 reaches only 1.9% — errors compound multiplicatively as horizon grows.</p>
+      <span class="verdict">✗ Collapses with horizon length</span>
+    </div>
+  </div>
+
+  <!-- Figure 1 -->
+  <div class="fig" style="padding:0; margin-bottom:14px;">
+    <img src="assets/main_1.jpg" alt="Trajectories are determined by the earliest denoising steps.">
+    <p class="cap" style="margin-top:12px;">
+      <b>(a)</b> The same noisy latent at S<sub>1</sub>, S<sub>5</sub>, S<sub>40</sub>: the motion plan is identical throughout — the trajectory is committed immediately. <b>(b)</b> Denoising-step search offers no trajectory exploration. <b>(c)</b> Temporal-step search does, by branching from verified prefixes.
+    </p>
+  </div>
+
+  <!-- Figure 5 -->
+  <div class="fig" style="padding:0; margin-top:28px;">
+    <img src="assets/figure5.jpg" alt="BoN degrades on long horizons; failures cluster at the start.">
+    <p class="cap">
+      <b>(a)</b> BoN exact match collapses past 40 steps; TBS holds (+42.9 pp at length 41+). <b>(b)</b> On strict OOD Keys-and-Doors, BoN-20 reaches 0.7% while TBS-20 reaches 22.7%. <b>(c)</b> 72–78% of BoN failures occur in the first 20% of the trajectory — root resampling re-fails at the same bottleneck every time.
+    </p>
+  </div>
+</div>
+
+
+<!-- TBS METHOD -->
+<hr class="sep">
+<h2 class="sec">Temporal Backtracking Search</h2>
+<p class="mintro">Cache the valid prefix. Branch from there. Repeat.</p>
+<div class="fig bd">
+  <img src="assets/method_2.jpg" alt="TBS vs BoN: generate–verify–restart.">
+  <p class="cap">
+    <b>BoN (top):</b> one error discards everything; restart from frame 1.
+    <b>TBS (bottom):</b> localize the first failure, cache the verified prefix as a restart anchor in a priority frontier, regenerate only the invalid suffix. Full-prefix conditioning (variable-K) preserves the motion context that a single-frame state reset loses entirely.
+  </p>
+</div>
+
+
+<!-- RESULTS -->
+<hr class="sep">
+<h2 class="sec">Results</h2>
+<p class="mintro">Three regimes spanning exact symbolic verification, learned noisy supervision, and closed-loop physics simulation.</p>
+
+<!-- ─── Symbolic ─── -->
+<div class="tbl" style="margin-top:24px;">
+  <table>
+    <caption>Symbolic Reasoning — Exact Match (%)</caption>
+    <colgroup class="cg-meta"><col><col></colgroup>
+    <colgroup class="cg-base"><col><col></colgroup>
+    <colgroup class="cg-ours"><col><col></colgroup>
+    <colgroup><col></colgroup>
+    <thead>
+      <tr class="grp">
+        <th colspan="2" class="gh-meta"></th>
+        <th colspan="2" class="gh-base">Baseline (BoN)</th>
+        <th colspan="2" class="gh-ours">Ours (TBS)</th>
+        <th class="gh-delta">Gain</th>
+      </tr>
+      <tr class="sub">
+        <th>Domain</th><th>Split</th>
+        <th>BoN&#8209;1</th><th>BoN&#8209;20</th>
+        <th>TBS&#8209;10</th><th>TBS&#8209;20</th>
+        <th>TBS&#8209;20 &minus; BoN&#8209;20</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td rowspan="2">2D Maze</td>
+        <td>Overall</td>
+        <td class="bar bon" style="--bw:51%">51.0</td>
+        <td class="bar bon" style="--bw:79%">79.0</td>
+        <td class="bar"     style="--bw:84%">84.0</td>
+        <td class="bar best" style="--bw:90.3%">90.3</td>
+        <td class="delta">+11.3</td>
+      </tr>
+      <tr>
+        <td>Hard</td>
+        <td class="bar bon" style="--bw:18.3%">18.3</td>
+        <td class="bar bon bad" style="--bw:60%">60.0</td>
+        <td class="bar"         style="--bw:68.7%">68.7</td>
+        <td class="bar best"    style="--bw:81%">81.0</td>
+        <td class="delta big">+21.0</td>
+      </tr>
+      <tr>
+        <td rowspan="2">Sokoban</td>
+        <td>Overall</td>
+        <td class="bar bon" style="--bw:41.5%">41.5</td>
+        <td class="bar bon" style="--bw:82%">82.0</td>
+        <td class="bar"     style="--bw:77.7%">77.7</td>
+        <td class="bar best" style="--bw:82.7%">82.7</td>
+        <td class="delta">+0.7</td>
+      </tr>
+      <tr>
+        <td>Hard</td>
+        <td class="bar bon" style="--bw:37%">37.0</td>
+        <td class="bar bon" style="--bw:78.3%">78.3</td>
+        <td class="bar"     style="--bw:73%">73.0</td>
+        <td class="bar best" style="--bw:79.7%">79.7</td>
+        <td class="delta">+1.4</td>
+      </tr>
+      <tr>
+        <td rowspan="2">Sliding Puzzle</td>
+        <td>Overall</td>
+        <td class="bar bon" style="--bw:39.5%">39.5</td>
+        <td class="bar bon" style="--bw:82.2%">82.2</td>
+        <td class="bar"     style="--bw:80.8%">80.8</td>
+        <td class="bar best" style="--bw:86.5%">86.5</td>
+        <td class="delta">+4.3</td>
+      </tr>
+      <tr>
+        <td>Hard</td>
+        <td class="bar bon" style="--bw:41.3%">41.3</td>
+        <td class="bar bon" style="--bw:81.3%">81.3</td>
+        <td class="bar best" style="--bw:81.3%">81.3</td>
+        <td class="bar best" style="--bw:88.7%">88.7</td>
+        <td class="delta">+7.4</td>
+      </tr>
+      <tr>
+        <td rowspan="2">Keys-and-Doors</td>
+        <td>ID Overall</td>
+        <td class="bar bon" style="--bw:52.3%">52.3</td>
+        <td class="bar bon" style="--bw:97.7%">97.7</td>
+        <td class="bar"     style="--bw:96.5%">96.5</td>
+        <td class="bar best" style="--bw:99.2%">99.2</td>
+        <td class="delta">+1.5</td>
+      </tr>
+      <tr class="sep-row">
+        <td><strong>Strict OOD</strong></td>
+        <td class="bar bon bad" style="--bw:0%">0.0</td>
+        <td class="bar bon bad" style="--bw:0.7%">0.7</td>
+        <td class="bar"         style="--bw:8.3%">8.3</td>
+        <td class="bar best"    style="--bw:22.7%">22.7</td>
+        <td class="delta big">+22.0</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- transition → navigation -->
+<div class="transition" style="margin:32px auto 0;">
+  Do the gains hold when verification is <em>noisy and learned</em> rather than exact symbolic rules?
+</div>
+
+<!-- Navigation table -->
+<div class="tbl" style="margin-top:24px;">
+  <table>
+    <caption>Continuous Navigation — Target-Bench</caption>
+    <colgroup class="cg-meta"><col></colgroup>
+    <colgroup class="cg-base"><col><col><col><col><col></colgroup>
+    <colgroup class="cg-ours"><col></colgroup>
+    <thead>
+      <tr class="sub">
+        <th>Method</th>
+        <th>ADE ↓</th><th>FDE ↓</th><th>MR (%) ↓</th><th>SE ↑</th><th>AC ↑</th><th>Overall ↑</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>BoN-1</td>
+        <td>0.541</td><td>1.074</td><td class="bad">16.70</td><td>0.268</td><td>0.730</td><td>0.323</td>
+      </tr>
+      <tr>
+        <td>BoN-3</td>
+        <td>0.300</td><td>0.765</td><td>4.05</td><td>0.407</td><td>0.817</td><td>0.424</td>
+      </tr>
+      <tr class="ours">
+        <td><strong>TBS-3</strong></td>
+        <td>0.276</td><td>0.640</td><td class="best">1.73</td><td class="best">0.496</td><td class="best">0.936</td><td class="best">0.508</td>
+      </tr>
+      <tr>
+        <td>BoN-5</td>
+        <td>0.265</td><td>0.680</td><td>2.70</td><td>0.466</td><td>0.872</td><td>0.473</td>
+      </tr>
+      <tr class="ours">
+        <td><strong>TBS-5</strong></td>
+        <td class="best">0.263</td><td class="best">0.622</td><td class="best">1.56</td><td class="best">0.508</td><td class="best">0.936</td><td class="best">0.511</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Figure 7 only -->
+<div class="fig" style="margin-top:24px;">
+  <img src="assets/nav_noise.jpg" alt="Verifier noise robustness: TBS matches or exceeds BoN at every noise level.">
+  <p class="cap">
+    <b>Verifier noise robustness.</b> TBS holds up under increasing reference-path corruption. It converges toward BoN only under the strongest perturbation (~0.7 m ADE noise), showing the mechanism is noise-tolerant.
+  </p>
+</div>
+
+<!-- transition → robotics -->
+<div class="transition" style="margin:32px auto 0;">
+  And when verification is a <em>closed-loop physics simulator</em> — not learned predictions, but ground-truth task success?
+</div>
+
+<!-- Robotics figure -->
+<div class="fig" style="margin-top:24px;">
+  <img src="assets/robotics.jpg" alt="RoboTwin: TBS adds +4% in clean scenes by reusing the pre-grasp prefix.">
+  <p class="cap">
+    <b>Robotic Manipulation (RoboTwin).</b> TBS adds a consistent +4% over matched-budget BoN in clean scenes. When BoN approaches correctly but fails the final grasp (gripper closed, contact mismatch), TBS reuses the verified pre-grasp prefix and regenerates only the contact window (gripper open, contact match).
+  </p>
+</div>
+
+
+<!-- QUALITATIVE -->
+<hr class="sep">
+<h2 class="sec">Qualitative examples</h2>
+<p class="mintro">Each clip shows BoN exhausting its budget and failing, followed by TBS backtracking to the failure point and succeeding from a restarted branch.</p>
+
+<style>
+  .vid-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1020px;margin:24px auto 0;padding:0 28px;}
+  .vid-block video{width:100%;border-radius:6px;display:block;background:#000;}
+  .vid-block .vhead{display:flex;align-items:center;gap:7px;margin-bottom:8px;flex-wrap:wrap;}
+  .vid-block .vhead h3{font-family:'Google Sans',sans-serif;font-weight:700;font-size:14px;color:var(--strong);margin:0;}
+  .vid-block .vnote{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:7px;}
+  .vid-wide{grid-column:1/-1;}
+  @media(max-width:620px){.vid-grid{grid-template-columns:1fr;}}
+</style>
+
+<div class="vid-grid">
+
+  <div class="vid-block">
+    <div class="vhead">
+      <h3>2D Maze</h3>
+      <span class="tag td">Grid-world</span>
+      <span class="tag tf">BoN-20 ✗</span>
+      <span class="tag tok">TBS-20 ✓</span>
+    </div>
+    <video autoplay loop muted playsinline>
+      <source src="assets/maze2d.mp4" type="video/mp4">
+    </video>
+
+  </div>
+
+  <div class="vid-block">
+    <div class="vhead">
+      <h3>3D Maze</h3>
+      <span class="tag td">Grid-world</span>
+      <span class="tag tf">BoN-20 ✗</span>
+      <span class="tag tok">TBS-20 ✓</span>
+    </div>
+    <video autoplay loop muted playsinline>
+      <source src="assets/maze3d.mp4" type="video/mp4">
+    </video>
+
+  </div>
+
+  <div class="vid-block">
+    <div class="vhead">
+      <h3>Sliding Puzzle</h3>
+      <span class="tag td">Grid-world</span>
+      <span class="tag tf">BoN-20 ✗</span>
+      <span class="tag tok">TBS-20 ✓</span>
+    </div>
+    <video autoplay loop muted playsinline>
+      <source src="assets/sliding.mp4" type="video/mp4">
+    </video>
+
+  </div>
+
+  <div class="vid-block">
+    <div class="vhead">
+      <h3>Sokoban</h3>
+      <span class="tag td">Grid-world</span>
+      <span class="tag tf">BoN-20 ✗</span>
+      <span class="tag tok">TBS-20 ✓</span>
+    </div>
+    <video autoplay loop muted playsinline>
+      <source src="assets/sokoban.mp4" type="video/mp4">
+    </video>
+
+  </div>
+
+  <div class="vid-block vid-wide">
+    <div class="vhead">
+      <h3>Keys-and-Doors — Strict OOD</h3>
+      <span class="tag td">Grid-world</span>
+      <span class="tag tf">BoN-20 = 0.7%</span>
+      <span class="tag tok">TBS-20 ✓ depth 3+</span>
+    </div>
+    <video autoplay loop muted playsinline>
+      <source src="assets/keys_door_ood.mp4" type="video/mp4">
+    </video>
+
+  </div>
+
+  <div class="vid-block">
+    <div class="vhead">
+      <h3>Navigation — Target-Bench</h3>
+      <span class="tag td">Continuous</span>
+      <span class="tag tf">BoN-5 ✗</span>
+      <span class="tag tok">TBS-5 ✓</span>
+    </div>
+    <video autoplay loop muted playsinline>
+      <source src="assets/targetbench.mp4" type="video/mp4">
+    </video>
+
+  </div>
+
+  <div class="vid-block">
+    <div class="vhead">
+      <h3>Robotic Manipulation — RoboTwin</h3>
+      <span class="tag td">Physics sim</span>
+      <span class="tag tf">BoN-5 ✗</span>
+      <span class="tag tok">TBS-5 ✓</span>
+    </div>
+    <video autoplay loop muted playsinline>
+      <source src="assets/robotwin.mp4" type="video/mp4">
+    </video>
+
+  </div>
+
+</div>
+
+<!-- BIBTEX -->
+<hr class="sep">
+<h2 class="sec" id="bibtex">BibTeX</h2>
+<div class="bib">
+  <button class="cbtn" onclick="cb(this)">Copy</button>
+<pre>@inproceedings{jun2026tbs,
+  title     = {Temporal Backtracking Search for
+               Test-time Generative Video Reasoning},
+  author    = {Jun, Sejoon and Ding, Zheng and Su, Chloe H.
+               and Ye, Weirui and Du, Yilun},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2026}
+}</pre>
+</div>
+
+<footer>
+  <p>Northeastern University · Harvard &amp; Kempner Institute · MIT &amp; Kempner Institute</p>
+  <p>Template inspired by <a href="https://nerfies.github.io/" target="_blank">Nerfies</a> and <a href="https://vision.cs.utexas.edu/projects/EgoExo-WM/" target="_blank">EgoExo-WM</a>.</p>
+</footer>
+
+<script>
+function cb(btn){
+  const pre=btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    const o=btn.textContent;btn.textContent='Copied ✓';
+    Object.assign(btn.style,{background:'#1a1a1a',color:'#fff',borderColor:'#1a1a1a'});
+    setTimeout(()=>{btn.textContent=o;btn.removeAttribute('style');},1600);
+  });
+}
+</script>
+</body>
+</html>
