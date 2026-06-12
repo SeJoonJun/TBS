@@ -50,13 +50,6 @@
   .btn.off{opacity:.42;pointer-events:none;}
   .btn svg{width:13px;height:13px;fill:currentColor;}
 
-  /* HOOK */
-  .hook{padding:52px 28px 0;text-align:center;max-width:1020px;margin:0 auto;}
-  .hook .q{font-family:'Google Sans',sans-serif;font-weight:700;
-    font-size:clamp(20px,2.5vw,29px);color:var(--strong);
-    line-height:1.3;max-width:22ch;margin:0 auto 10px;letter-spacing:-.012em;}
-  .hook .a{font-size:15.5px;color:var(--text);max-width:48ch;margin:0 auto;line-height:1.7;}
-
   /* ABSTRACT */
   .abstract{max-width:800px;margin:0 auto;padding:0 28px;}
   .abstract p{font-size:16px;line-height:1.8;color:var(--text);margin:0 0 14px;
@@ -89,6 +82,16 @@
   .cap{max-width:800px;margin:11px auto 0;font-size:13.5px;color:var(--text);line-height:1.6;text-align:left;}
   .cap b{color:var(--strong);}
 
+  /* side-by-side figure pair */
+  .figpair{display:grid;grid-template-columns:1fr 1fr;gap:24px;
+    max-width:880px;margin:0 auto;padding:0 28px;align-items:start;}
+  .figpair figure{margin:0;}
+  .figpair img{width:100%;height:auto;display:block;border:1px solid var(--rule);
+    border-radius:6px;background:#fff;}
+  .figpair figcaption{margin-top:9px;font-size:13px;color:var(--text);line-height:1.55;text-align:left;}
+  .figpair figcaption b{color:var(--strong);}
+  @media(max-width:680px){.figpair{grid-template-columns:1fr;gap:22px;}}
+
   /* INSIGHT STRIP */
   .istrip{display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr;
     align-items:center;max-width:860px;margin:20px auto 0;
@@ -108,6 +111,62 @@
   /* METHOD */
   .mintro{max-width:640px;margin:0 auto 18px;padding:0 28px;
     text-align:center;font-size:15.5px;color:var(--text);line-height:1.65;}
+
+  /* prose blocks shared by problem + method */
+  .prose{max-width:760px;margin:0 auto;padding:0 28px;}
+  .prose p{font-size:15.5px;line-height:1.75;color:var(--text);margin:0 0 14px;}
+  .prose p:last-child{margin:0;}
+  .lead-in{max-width:760px;margin:0 auto 22px;padding:0 28px;
+    font-size:15.5px;line-height:1.75;color:var(--text);}
+
+  /* the conditional-reuse-gap callout */
+  .gap-note{max-width:760px;margin:22px auto 0;padding:16px 20px;
+    background:var(--callout);border:1px solid var(--rule);border-radius:8px;
+    font-size:14.5px;line-height:1.7;color:var(--text);}
+  .gap-note b{color:var(--strong);}
+  .gap-note .eq{font-family:'Roboto Mono',monospace;font-size:13px;color:var(--accent);white-space:nowrap;}
+
+  /* three-step loop */
+  .steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;
+    max-width:880px;margin:26px auto 0;padding:0 28px;}
+  .step{background:#fff;border:1px solid var(--rule);border-radius:9px;padding:18px 18px 16px;position:relative;}
+  .step .sn{display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;border-radius:999px;background:var(--accent);color:#fff;
+    font-family:'Google Sans',sans-serif;font-weight:700;font-size:13px;margin-bottom:10px;}
+  .step h4{font-family:'Google Sans',sans-serif;font-weight:700;font-size:14.5px;
+    color:var(--strong);margin:0 0 6px;line-height:1.3;}
+  .step p{font-size:13.5px;line-height:1.6;color:var(--text);margin:0;}
+  .step .kw{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--accent);
+    background:rgba(29,78,216,.06);border-radius:3px;padding:1px 5px;}
+  @media(max-width:760px){.steps{grid-template-columns:1fr;}}
+
+  /* three ingredients */
+  .ingredients{max-width:880px;margin:26px auto 0;padding:0 28px;}
+  .ingredient{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;
+    padding:15px 0;border-bottom:1px solid var(--rule);}
+  .ingredient:last-child{border-bottom:none;}
+  .ingredient .ico{width:34px;height:34px;border-radius:8px;
+    background:rgba(29,78,216,.08);border:1px solid rgba(29,78,216,.2);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Roboto Mono',monospace;font-weight:600;font-size:13px;color:var(--accent);}
+  .ingredient h4{font-family:'Google Sans',sans-serif;font-weight:700;font-size:15px;
+    color:var(--strong);margin:0 0 4px;line-height:1.3;}
+  .ingredient p{font-size:14px;line-height:1.65;color:var(--text);margin:0;}
+  .ingredient code{font-family:'Roboto Mono',monospace;font-size:12.5px;color:var(--strong);
+    background:var(--soft);border:1px solid var(--rule);border-radius:3px;padding:0 4px;}
+
+  /* DOMAIN RESULT BLOCK */
+  .domain-block{max-width:880px;margin:0 auto;padding:0 28px;}
+  .domain-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+    margin:38px auto 4px;max-width:880px;padding:0 28px;}
+  .domain-head .dn{font-family:'Roboto Mono',monospace;font-size:11px;font-weight:600;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--accent);}
+  .domain-head h3{font-family:'Google Sans',sans-serif;font-weight:700;
+    font-size:19px;color:var(--strong);margin:0;letter-spacing:-.01em;}
+  .domain-head .vmode{font-size:13px;color:var(--muted);}
+  .domain-take{max-width:880px;margin:12px auto 0;padding:0 28px;
+    font-size:14px;line-height:1.65;color:var(--text);}
+  .domain-take b{color:var(--strong);}
 
   /* ── RESULTS TABLE with inline bars ── */
   .tbl{max-width:860px;margin:0 auto;padding:0 28px;}
@@ -213,8 +272,7 @@
   footer p{margin:3px 0;} footer a{color:var(--link);}
 
   @media(max-width:600px){
-    .w,.abstract,.diagnosis,.fig,.mintro,.tbl,.qual,.bib,.transition{padding-left:16px;padding-right:16px;}
-    .hook{padding:36px 16px 0;}
+    .w,.abstract,.diagnosis,.fig,.figpair,.mintro,.tbl,.qual,.bib,.transition,.prose,.lead-in,.gap-note,.steps,.ingredients,.domain-block,.domain-head,.domain-take{padding-left:16px;padding-right:16px;}
   }
 </style>
 </head>
@@ -236,13 +294,6 @@
 </header>
 
 
-<!-- HOOK -->
-<div class="hook">
-  <p class="q">Dead end in a maze?<br>Go back to the last fork, not the entrance.</p>
-  <p class="a">TBS applies this to generative video world models. When a rollout fails, it backtracks to the exact failure point and branches from there, instead of discarding the whole plan and starting over.</p>
-</div>
-
-
 <!-- ABSTRACT -->
 <hr class="sep">
 <h2 class="sec">Abstract</h2>
@@ -262,11 +313,16 @@
 <!-- THE PROBLEM -->
 <hr class="sep">
 <h2 class="sec">Why existing test-time scaling fails</h2>
+
+<p class="lead-in">
+  Test-time scaling transformed reasoning in language models, but the recipes that work there do not transfer to generative video. The standard moves — searching over denoising steps, or sampling many full rollouts and keeping the best (Best-of-N) — both assume the model can <em>explore</em> alternatives at the point where it went wrong. For video reasoning, neither assumption holds. We trace this to two empirical bottlenecks.
+</p>
+
 <div class="diagnosis">
   <div class="dx-pair">
     <div class="dx-card">
       <p class="num">Denoising-step search</p>
-      <p>The spatial trajectory is committed at the very first denoising step — S<sub>1</sub>, S<sub>5</sub>, and S<sub>40</sub> all produce the same plan. There is nothing to search over.</p>
+      <p>The spatial trajectory is committed at the very first denoising step — S<sub>1</sub>, S<sub>5</sub>, and S<sub>40</sub> all produce the same plan. There is nothing left to search over.</p>
       <span class="verdict">✗ Wrong axis entirely</span>
     </div>
     <div class="dx-card">
@@ -276,10 +332,15 @@
     </div>
     <div class="dx-card">
       <p class="num">One-shot generation, long horizons</p>
-      <p>Correctness must hold at every frame simultaneously. On 2D Maze paths of 41+ steps, single-shot BoN-1 reaches only 1.9% — errors compound multiplicatively as horizon grows.</p>
+      <p>Correctness must hold at every frame simultaneously. On 2D Maze paths of 41+ steps, single-shot BoN-1 reaches only 1.9% — errors compound multiplicatively as the horizon grows.</p>
       <span class="verdict">✗ Collapses with horizon length</span>
     </div>
   </div>
+
+  <!-- Bottleneck 1 -->
+  <p class="prose" style="margin-bottom:16px;">
+    <strong>Bottleneck 1 — the trajectory is decided early, in the wrong search space.</strong> If we decode the same noisy latent at successive denoising steps, the high-level motion plan is already fixed within the first few steps and never changes afterward. So spending more compute on later denoising steps cannot redirect a plan that was wrong from the start — the denoising axis simply has nothing to explore.
+  </p>
 
   <!-- Figure 1 -->
   <div class="fig" style="padding:0; margin-bottom:14px;">
@@ -289,12 +350,21 @@
     </p>
   </div>
 
-  <!-- Figure 5 -->
-  <div class="fig" style="padding:0; margin-top:28px;">
-    <img src="assets/figure5.jpg" alt="BoN degrades on long horizons; failures cluster at the start.">
-    <p class="cap">
-      <b>(a)</b> BoN exact match collapses past 40 steps; TBS holds (+42.9 pp at length 41+). <b>(b)</b> On strict OOD Keys-and-Doors, BoN-20 reaches 0.7% while TBS-20 reaches 22.7%. <b>(c)</b> 72–78% of BoN failures occur in the first 20% of the trajectory — root resampling re-fails at the same bottleneck every time.
-    </p>
+  <!-- Bottleneck 2 -->
+  <p class="prose" style="margin-top:28px;margin-bottom:16px;">
+    <strong>Bottleneck 2 — failures cluster early, so blind resampling wastes the budget.</strong> Reasoning errors are not spread evenly along a rollout; they concentrate heavily in its opening frames. Because Best-of-N starts every candidate from scratch, it keeps re-failing in that same early region and throws away the correct frames it had already produced downstream. As the horizon lengthens, the probability that an independent rollout clears the bottleneck shrinks, and exact match collapses.
+  </p>
+
+  <!-- Bottleneck-2 evidence: two figures -->
+  <div class="figpair">
+    <figure>
+      <img src="assets/failure_location.png" alt="Density of first-failure location along the trajectory for Maze and Keys-and-Doors BoN rollouts.">
+      <figcaption><b>Failures cluster early.</b> Across Maze and Keys-and-Doors, the first failure in a BoN rollout concentrates in the opening fifth of the trajectory — 72–78% of failures fall in the first 20%. Independent resampling re-fails at this same early bottleneck every time.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/exact_match_pathlen.png" alt="Exact match versus path length for BoN-1, BoN-5, BoN-10, and BoN-20.">
+      <figcaption><b>Collapse with horizon length.</b> Exact match holds on short paths but falls off sharply past 40 steps, and adding budget (BoN-1 → BoN-20) only delays the collapse. Correctness must hold at every frame at once, so errors compound multiplicatively as the horizon grows.</figcaption>
+    </figure>
   </div>
 </div>
 
@@ -303,7 +373,36 @@
 <hr class="sep">
 <h2 class="sec">Temporal Backtracking Search</h2>
 <p class="mintro">Cache the valid prefix. Branch from there. Repeat.</p>
-<div class="fig bd">
+
+<p class="prose" style="margin-bottom:0;">
+  Both bottlenecks point the same way: stop searching the denoising axis, and stop throwing away verified frames. TBS reformulates video reasoning as inference-time search over the <strong>temporal axis</strong>. Instead of treating a rollout as one indivisible block, it isolates the first failure, keeps the verified frames before it, and spends compute extending that prefix — turning one long-horizon problem into a sequence of short, locally-easy continuations.
+</p>
+
+<div class="gap-note">
+  <b>Why this is easier — the conditional reuse gap.</b> A root-level generator must synthesize the entire future from frame&nbsp;1: <span class="eq">p<sub>θ</sub>(v<sub>2:T</sub> | v<sub>1</sub>)</span>. Prefix repair only has to resolve what remains after a verified prefix of length <span class="eq">ℓ</span>: <span class="eq">p<sub>θ</sub>(v<sub>ℓ+1:T</sub> | v<sub>1:ℓ</sub>)</span>. Because reasoning errors compound multiplicatively over time, extending a clean partial sequence is far more tractable than generating a long rollout from scratch. TBS exists to exploit that gap.
+</div>
+
+<!-- the three-step loop -->
+<div class="steps">
+  <div class="step">
+    <span class="sn">1</span>
+    <h4>Generate</h4>
+    <p>Sample candidate rollouts. For the first round, start from the initial frame; afterwards, continue from the highest-priority verified <span class="kw">prefix anchor</span> in the frontier.</p>
+  </div>
+  <div class="step">
+    <span class="sn">2</span>
+    <h4>Verify</h4>
+    <p>A process verifier scans the rollout, finds the <span class="kw">first failure frame</span>, and returns the verified prefix before it plus a priority score — it localizes <em>where</em> the trajectory broke, not just whether it did.</p>
+  </div>
+  <div class="step">
+    <span class="sn">3</span>
+    <h4>Restart</h4>
+    <p>Cache the verified prefix as a restart anchor, then regenerate <em>only</em> the invalid suffix from that anchor. Repeat until a rollout reaches the goal or the budget is spent.</p>
+  </div>
+</div>
+
+<!-- the diagram -->
+<div class="fig bd" style="margin-top:34px;">
   <img src="assets/method_2.jpg" alt="TBS vs BoN: generate–verify–restart.">
   <p class="cap">
     <b>BoN (top):</b> one error discards everything; restart from frame 1.
@@ -311,16 +410,53 @@
   </p>
 </div>
 
+<!-- three core ingredients -->
+<p class="prose" style="margin-top:38px;margin-bottom:4px;">
+  <strong>Three components make the loop work:</strong>
+</p>
+<div class="ingredients">
+  <div class="ingredient">
+    <div class="ico">K</div>
+    <div>
+      <h4>Variable-K conditioning — the generative engine</h4>
+      <p>Standard video diffusion denoises all frames jointly from a single initial frame, so it cannot resume from an arbitrary prefix. We fine-tune the base model with a per-frame timestep mask: the first <code>K</code> latent frames are held clean while the suffix is noised. A progressive curriculum (<code>K=1 → 20</code>) teaches the model to treat any verified prefix as fixed context and regenerate only the continuation — at constant per-branch cost.</p>
+    </div>
+  </div>
+  <div class="ingredient">
+    <div class="ico">V</div>
+    <div>
+      <h4>Temporal process verification — finding the restart anchor</h4>
+      <p>A process-level verifier returns the first failure frame, a restart anchor aligned to the VAE's latent boundary, and a priority score. It exposes a failure location and a restartable prefix, but never the correct continuation — the generator still has to synthesize the suffix. We instantiate it three ways: exact symbolic rules, a learned trajectory predictor, and a closed-loop physics simulator.</p>
+    </div>
+  </div>
+  <div class="ingredient">
+    <div class="ico">F</div>
+    <div>
+      <h4>Prefix-based search — reallocating the budget</h4>
+      <p>Verified prefixes live in a priority frontier. Each step pops the most promising anchor and samples a few suffix continuations, inserting any new valid prefixes back into the frontier. This best-first search over prefixes spends compute on <em>extending</em> correct trajectories instead of re-rolling from the root — depth-friendly domains repair late drift, width-friendly ones escape early dead states.</p>
+    </div>
+  </div>
+</div>
+
 
 <!-- RESULTS -->
 <hr class="sep">
 <h2 class="sec">Results</h2>
-<p class="mintro">Three regimes spanning exact symbolic verification, learned noisy supervision, and closed-loop physics simulation.</p>
+<p class="mintro">We evaluate across three regimes that span the realistic spectrum of process supervision — from exact symbolic rules to a learned noisy predictor to a closed-loop physics simulator. At matched compute budget, TBS Pareto-dominates Best-of-N in every regime.</p>
 
-<!-- ─── Symbolic ─── -->
-<div class="tbl" style="margin-top:24px;">
+<!-- ═══ DOMAIN 1: SYMBOLIC ═══ -->
+<div class="domain-head">
+  <span class="dn">Regime 1</span>
+  <h3>Symbolic reasoning</h3>
+  <span class="vmode">verifier: exact game rules</span>
+</div>
+<p class="domain-take">
+  Five rule-based grid-worlds where deterministic rules localize the first failure exactly. <b>The gain tracks horizon length:</b> tiny on already-saturated short tasks, large where rollouts are long. The clearest case is strict-OOD Keys-and-Doors, where every TBS solve comes from a restarted branch.
+</p>
+
+<div class="tbl" style="margin-top:18px;">
   <table>
-    <caption>Symbolic Reasoning — Exact Match (%)</caption>
+    <caption>Exact Match (%) — matched budget</caption>
     <colgroup class="cg-meta"><col><col></colgroup>
     <colgroup class="cg-base"><col><col></colgroup>
     <colgroup class="cg-ours"><col><col></colgroup>
@@ -412,15 +548,87 @@
   </table>
 </div>
 
-<!-- transition → navigation -->
-<div class="transition" style="margin:32px auto 0;">
-  Do the gains hold when verification is <em>noisy and learned</em> rather than exact symbolic rules?
+<p class="domain-take" style="margin-top:20px;">
+  <b>Where do the solves come from?</b> Of every episode TBS-20 solves, how many were already solved by a root rollout (depth 0) versus only after a restarted branch (depth ≥ 1). The longer-horizon domains lean heavily on restarts — and strict-OOD Keys-and-Doors is decisive: <b>not a single solve comes from a root sample; all 68 come from restarted branches.</b>
+</p>
+
+<div class="tbl" style="margin-top:14px;">
+  <table>
+    <caption>Root solves vs. restarted-branch solves (TBS-20)</caption>
+    <colgroup class="cg-meta"><col></colgroup>
+    <colgroup class="cg-ours"><col></colgroup>
+    <colgroup class="cg-meta"><col></colgroup>
+    <colgroup class="cg-ours"><col></colgroup>
+    <colgroup><col></colgroup>
+    <thead>
+      <tr class="sub">
+        <th>Domain</th>
+        <th>TBS&#8209;20 EM</th>
+        <th>Root <span class="sub">d=0</span></th>
+        <th>Restart <span class="sub">d&#8805;1</span></th>
+        <th>Restart-added EM</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2D Maze</td>
+        <td>90.3%</td>
+        <td>357</td>
+        <td class="best">185</td>
+        <td class="delta">+30.8 pp</td>
+      </tr>
+      <tr>
+        <td>3D Maze</td>
+        <td>97.7%</td>
+        <td>574</td>
+        <td class="best">12</td>
+        <td class="delta">+2.0 pp</td>
+      </tr>
+      <tr>
+        <td>Sokoban</td>
+        <td>82.7%</td>
+        <td>448</td>
+        <td class="best">48</td>
+        <td class="delta">+8.0 pp</td>
+      </tr>
+      <tr>
+        <td>Sliding Puzzle</td>
+        <td>86.5%</td>
+        <td>405</td>
+        <td class="best">114</td>
+        <td class="delta">+19.0 pp</td>
+      </tr>
+      <tr>
+        <td>Keys-and-Doors</td>
+        <td>99.2%</td>
+        <td>510</td>
+        <td class="best">85</td>
+        <td class="delta">+14.2 pp</td>
+      </tr>
+      <tr class="sep-row">
+        <td><strong>Keys-and-Doors OOD</strong></td>
+        <td>22.7%</td>
+        <td>0</td>
+        <td class="best">68</td>
+        <td class="delta big">+22.7 pp</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
-<!-- Navigation table -->
-<div class="tbl" style="margin-top:24px;">
+<!-- ═══ DOMAIN 2: NAVIGATION ═══ -->
+<div class="domain-head" style="margin-top:46px;">
+  <span class="dn">Regime 2</span>
+  <h3>Continuous navigation</h3>
+  <span class="vmode">verifier: learned, noisy trajectory predictor</span>
+</div>
+<p class="domain-take">
+  Target-Bench tests whether the gains survive when the verifier is <b>learned and noisy</b> rather than an exact rule. TBS improves every one of the five trajectory metrics at both budgets, with the largest gains on miss rate and approach consistency — a noisy process signal is still enough to localize where a rollout drifts.
+</p>
+
+<div class="tbl" style="margin-top:18px;">
   <table>
-    <caption>Continuous Navigation — Target-Bench</caption>
+    <caption>Target-Bench — trajectory metrics</caption>
     <colgroup class="cg-meta"><col></colgroup>
     <colgroup class="cg-base"><col><col><col><col><col></colgroup>
     <colgroup class="cg-ours"><col></colgroup>
@@ -441,7 +649,7 @@
       </tr>
       <tr class="ours">
         <td><strong>TBS-3</strong></td>
-        <td>0.276</td><td>0.640</td><td class="best">1.73</td><td class="best">0.496</td><td class="best">0.936</td><td class="best">0.508</td>
+        <td class="best">0.276</td><td class="best">0.640</td><td class="best">1.73</td><td class="best">0.496</td><td class="best">0.936</td><td class="best">0.508</td>
       </tr>
       <tr>
         <td>BoN-5</td>
@@ -455,44 +663,84 @@
   </table>
 </div>
 
-<!-- Figure 7 only -->
-<div class="fig" style="margin-top:24px;">
-  <img src="assets/nav_noise.jpg" alt="Verifier noise robustness: TBS matches or exceeds BoN at every noise level.">
-  <p class="cap">
-    <b>Verifier noise robustness.</b> TBS holds up under increasing reference-path corruption. It converges toward BoN only under the strongest perturbation (~0.7 m ADE noise), showing the mechanism is noise-tolerant.
-  </p>
+<!-- ═══ DOMAIN 3: ROBOTICS ═══ -->
+<div class="domain-head" style="margin-top:46px;">
+  <span class="dn">Regime 3</span>
+  <h3>Robotic manipulation</h3>
+  <span class="vmode">verifier: physics simulator</span>
 </div>
+<p class="domain-take">
+  Generated videos are decoded to robot actions and replayed in a physics simulator. <b>TBS helps when the base video model produces a repairable approach prefix</b> — reusing the verified pre-grasp motion and regenerating only the failed contact window — but gains shrink under heavy visual randomization, where the base policy rarely reaches the target and there is little to repair.
+</p>
 
-<!-- transition → robotics -->
-<div class="transition" style="margin:32px auto 0;">
-  And when verification is a <em>closed-loop physics simulator</em> — not learned predictions, but ground-truth task success?
-</div>
-
-<!-- Robotics figure -->
-<div class="fig" style="margin-top:24px;">
-  <img src="assets/robotics.jpg" alt="RoboTwin: TBS adds +4% in clean scenes by reusing the pre-grasp prefix.">
-  <p class="cap">
-    <b>Robotic Manipulation (RoboTwin).</b> TBS adds a consistent +4% over matched-budget BoN in clean scenes. When BoN approaches correctly but fails the final grasp (gripper closed, contact mismatch), TBS reuses the verified pre-grasp prefix and regenerates only the contact window (gripper open, contact match).
-  </p>
+<div class="tbl" style="margin-top:18px;">
+  <table>
+    <caption>RoboTwin — success rate (%), matched budget</caption>
+    <colgroup class="cg-meta"><col></colgroup>
+    <colgroup class="cg-base"><col></colgroup>
+    <colgroup class="cg-base"><col></colgroup>
+    <colgroup class="cg-ours"><col></colgroup>
+    <colgroup class="cg-base"><col></colgroup>
+    <colgroup class="cg-ours"><col></colgroup>
+    <thead>
+      <tr class="grp">
+        <th class="gh-meta"></th>
+        <th class="gh-base">Baseline</th>
+        <th colspan="2" class="gh-base">Budget 3</th>
+        <th colspan="2" class="gh-base">Budget 5</th>
+      </tr>
+      <tr class="sub">
+        <th>Setting</th>
+        <th>BoN&#8209;1</th>
+        <th>BoN&#8209;3</th><th>TBS&#8209;3</th>
+        <th>BoN&#8209;5</th><th>TBS&#8209;5</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Clean scenes</td>
+        <td>35</td>
+        <td>46</td><td class="best">50</td>
+        <td>49</td><td class="best">53</td>
+      </tr>
+      <tr>
+        <td>Randomized scenes</td>
+        <td>6</td>
+        <td>15</td><td class="best">16</td>
+        <td>17</td><td class="best">18</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 
 <!-- QUALITATIVE -->
 <hr class="sep">
 <h2 class="sec">Qualitative examples</h2>
-<p class="mintro">Each clip shows BoN exhausting its budget and failing, followed by TBS backtracking to the failure point and succeeding from a restarted branch.</p>
+<p class="mintro">Each clip shows BoN exhausting its budget and failing, followed by TBS backtracking to the failure point and succeeding from a restarted branch. Grouped by the same three regimes as the results above.</p>
 
 <style>
-  .vid-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1020px;margin:24px auto 0;padding:0 28px;}
+  .vid-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1020px;margin:18px auto 0;padding:0 28px;}
   .vid-block video{width:100%;border-radius:6px;display:block;background:#000;}
   .vid-block .vhead{display:flex;align-items:center;gap:7px;margin-bottom:8px;flex-wrap:wrap;}
   .vid-block .vhead h3{font-family:'Google Sans',sans-serif;font-weight:700;font-size:14px;color:var(--strong);margin:0;}
   .vid-block .vnote{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:7px;}
-  .vid-wide{grid-column:1/-1;}
-  @media(max-width:620px){.vid-grid{grid-template-columns:1fr;}}
+  /* a single video in a regime: center it at half width */
+  .vid-grid.solo{grid-template-columns:1fr;max-width:498px;}
+  /* odd last video in a 2-col grid: span both columns but cap + center it */
+  .vid-grid > .vid-block.center-last{grid-column:1 / -1;max-width:498px;margin-left:auto;margin-right:auto;width:100%;}
+  @media(max-width:620px){
+    .vid-grid{grid-template-columns:1fr;}
+    .vid-grid.solo,.vid-grid > .vid-block.center-last{max-width:none;}
+  }
 </style>
 
-<div class="vid-grid">
+<!-- Group 1: symbolic grid-worlds -->
+<div class="domain-head" style="margin-top:30px;">
+  <span class="dn">Regime 1</span>
+  <h3>Symbolic grid-worlds</h3>
+</div>
+<div class="vid-grid" style="margin-top:14px;">
 
   <div class="vid-block">
     <div class="vhead">
@@ -504,7 +752,6 @@
     <video autoplay loop muted playsinline>
       <source src="assets/maze2d.mp4" type="video/mp4">
     </video>
-
   </div>
 
   <div class="vid-block">
@@ -517,7 +764,6 @@
     <video autoplay loop muted playsinline>
       <source src="assets/maze3d.mp4" type="video/mp4">
     </video>
-
   </div>
 
   <div class="vid-block">
@@ -530,7 +776,6 @@
     <video autoplay loop muted playsinline>
       <source src="assets/sliding.mp4" type="video/mp4">
     </video>
-
   </div>
 
   <div class="vid-block">
@@ -543,10 +788,9 @@
     <video autoplay loop muted playsinline>
       <source src="assets/sokoban.mp4" type="video/mp4">
     </video>
-
   </div>
 
-  <div class="vid-block vid-wide">
+  <div class="vid-block center-last">
     <div class="vhead">
       <h3>Keys-and-Doors — Strict OOD</h3>
       <span class="tag td">Grid-world</span>
@@ -556,8 +800,16 @@
     <video autoplay loop muted playsinline>
       <source src="assets/keys_door_ood.mp4" type="video/mp4">
     </video>
-
   </div>
+
+</div>
+
+<!-- Group 2: continuous navigation -->
+<div class="domain-head" style="margin-top:42px;">
+  <span class="dn">Regime 2</span>
+  <h3>Continuous navigation</h3>
+</div>
+<div class="vid-grid solo" style="margin-top:14px;">
 
   <div class="vid-block">
     <div class="vhead">
@@ -569,8 +821,16 @@
     <video autoplay loop muted playsinline>
       <source src="assets/targetbench.mp4" type="video/mp4">
     </video>
-
   </div>
+
+</div>
+
+<!-- Group 3: robotic manipulation -->
+<div class="domain-head" style="margin-top:42px;">
+  <span class="dn">Regime 3</span>
+  <h3>Robotic manipulation</h3>
+</div>
+<div class="vid-grid solo" style="margin-top:14px;">
 
   <div class="vid-block">
     <div class="vhead">
@@ -582,7 +842,6 @@
     <video autoplay loop muted playsinline>
       <source src="assets/robotwin.mp4" type="video/mp4">
     </video>
-
   </div>
 
 </div>
