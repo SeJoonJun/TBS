@@ -360,11 +360,11 @@
   <!-- Bottleneck-2 evidence: two figures -->
   <div class="figpair">
     <figure>
-      <img src="assets/failure_location.png" alt="Density of first-failure location along the trajectory for Maze and Keys-and-Doors BoN rollouts, concentrated in the first 20%.">
+      <img src="assets/failure_location.svg" alt="Density of first-failure location along the trajectory for Maze and Keys-and-Doors BoN rollouts, concentrated in the first 20%.">
       <figcaption><b>Failures cluster early.</b> The first failure in a BoN rollout concentrates in the opening fifth of the trajectory — 72–78% fall in the first 20%. Independent resampling re-fails at this same early bottleneck every time, discarding the verified-correct remainder.</figcaption>
     </figure>
     <figure>
-      <img src="assets/exact_match_pathlen.png" alt="Exact match versus path length for BoN-1, BoN-5, BoN-10, and BoN-20, collapsing past 40 steps.">
+      <img src="assets/exact_match_pathlen.svg" alt="Exact match versus path length for BoN-1, BoN-5, BoN-10, and BoN-20, collapsing past 40 steps.">
       <figcaption><b>Collapse with horizon length.</b> Exact match holds on short paths but falls off sharply past 40 steps, and adding budget (BoN-1 → BoN-20) only delays it. Correctness must hold at every frame at once, so errors compound multiplicatively as the horizon grows.</figcaption>
     </figure>
   </div>
